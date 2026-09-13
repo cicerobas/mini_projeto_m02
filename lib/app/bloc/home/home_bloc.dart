@@ -18,7 +18,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeFilterChanged>((event, emit) => emit(state.copyWith(filter: event.filter)));
     on<HomeSearchChanged>((event, emit) => emit(state.copyWith(searchQuery: event.query)));
     on<HomeTodoToggled>(_onTodoToggled);
+    on<HomeLogoutRequested>((event, emit) async {
+      await authRepository.logout();
+      emit(state.copyWith(status: HomeStatus.loggedOut));
+    });
   }
+
   Future<void> _onTodoToggled(HomeTodoToggled event, Emitter<HomeState> emit) async {
     final todo = state.todos.firstWhere((item) => item.id == event.todoId);
     final updatedStatus = !todo.completed;

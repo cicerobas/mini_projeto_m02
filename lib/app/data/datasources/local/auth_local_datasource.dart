@@ -18,4 +18,9 @@ class AuthLocalDatasource {
     }
     return null;
   }
+
+  Future<void> clearUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_loggedUserKey);
+  }
 }

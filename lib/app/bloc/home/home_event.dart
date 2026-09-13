@@ -20,3 +20,5 @@ class HomeTodoToggled extends HomeEvent {
   final int todoId;
   HomeTodoToggled(this.todoId);
 }
+
+class HomeLogoutRequested extends HomeEvent {}

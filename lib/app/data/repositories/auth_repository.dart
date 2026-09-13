@@ -9,6 +9,7 @@ import 'package:mini_projeto_m02/core/result.dart';
 sealed class AuthRepository {
   Future<Result<UserModel?>> getSavedUser();
   Future<Result<UserModel>> login({required String username, required String password});
+  Future<Result<void>> logout();
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -38,6 +39,16 @@ class AuthRepositoryImpl implements AuthRepository {
       final result = await localDatasource.getUser();
       final user = result != null ? UserModel.fromMap(result) : null;
       return Result.success(user);
+    } catch (e) {
+      return Result.failure(UnknownFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<void>> logout() async {
+    try {
+      await localDatasource.clearUser();
+      return Result.success(null);
     } catch (e) {
       return Result.failure(UnknownFailure(message: e.toString()));
     }

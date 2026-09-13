@@ -1,6 +1,6 @@
 import 'package:mini_projeto_m02/app/data/models/todo_model.dart';
 
-enum HomeStatus { initial, loading, success, error }
+enum HomeStatus { initial, loading, success, error, loggedOut }
 
 enum TodoFilter { all, completed, incomplete }
 
