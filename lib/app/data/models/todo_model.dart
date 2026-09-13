@@ -22,4 +22,13 @@ class TodoModel {
   }
 
   factory TodoModel.fromJson(String source) => TodoModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  TodoModel copyWith({int? id, String? todo, bool? completed, int? userId}) {
+    return TodoModel(
+      id: id ?? this.id,
+      todo: todo ?? this.todo,
+      completed: completed ?? this.completed,
+      userId: userId ?? this.userId,
+    );
+  }
 }

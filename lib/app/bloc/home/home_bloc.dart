@@ -15,6 +15,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.authRepository, required this.todoRepository}) : super(const HomeState()) {
     on<HomeStarted>(_onHomeStarted);
     on<HomeRetryRequested>(_onHomeStarted);
+    on<HomeFilterChanged>((event, emit) => emit(state.copyWith(filter: event.filter)));
+    on<HomeSearchChanged>((event, emit) => emit(state.copyWith(searchQuery: event.query)));
+    on<HomeTodoToggled>(_onTodoToggled);
+  }
+  Future<void> _onTodoToggled(HomeTodoToggled event, Emitter<HomeState> emit) async {
+    final todo = state.todos.firstWhere((item) => item.id == event.todoId);
+    final updatedStatus = !todo.completed;
+    final result = await todoRepository.toggleTodoStatus(event.todoId, updatedStatus);
+
+    switch (result) {
+      case Success():
+        final updatedTodos = state.todos
+            .map((item) => item.id == event.todoId ? item.copyWith(completed: updatedStatus) : item)
+            .toList();
+        emit(state.copyWith(todos: updatedTodos));
+      case Failure():
+        break;
+    }
   }
 
   Future<void> _onHomeStarted(HomeEvent event, Emitter<HomeState> emit) async {

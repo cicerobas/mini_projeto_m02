@@ -4,6 +4,7 @@ import 'package:sqflite/sqlite_api.dart';
 sealed class TodoLocalDatasource {
   Future<void> saveTodos(List<TodoModel> todos);
   Future<List<TodoModel>> getUserTodosById(int userId);
+  Future<void> updateTodoStatus(int todoId, bool completed);
 }
 
 class TodoLocalDatasourceImpl implements TodoLocalDatasource {
@@ -26,5 +27,10 @@ class TodoLocalDatasourceImpl implements TodoLocalDatasource {
     }
 
     await batch.commit(noResult: true);
+  }
+
+  @override
+  Future<void> updateTodoStatus(int todoId, bool completed) async {
+    await database.update("todos", {"completed": completed ? 1 : 0}, where: "id = ?", whereArgs: [todoId]);
   }
 }

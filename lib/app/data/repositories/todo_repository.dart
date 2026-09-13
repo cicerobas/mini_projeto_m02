@@ -8,6 +8,7 @@ import 'package:mini_projeto_m02/core/result.dart';
 
 sealed class TodoRepository {
   Future<Result<List<TodoModel>>> getTodos(int userId);
+  Future<Result<void>> toggleTodoStatus(int todoId, bool completed);
 }
 
 class TodoRepositoryImpl implements TodoRepository {
@@ -25,6 +26,16 @@ class TodoRepositoryImpl implements TodoRepository {
       return Result.success(todos);
     } on AppClientException catch (e) {
       return Result.failure(e.toFailure());
+    } catch (e) {
+      return Result.failure(UnknownFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<void>> toggleTodoStatus(int todoId, bool completed) async {
+    try {
+      await localDatasource.updateTodoStatus(todoId, completed);
+      return Result.success(null);
     } catch (e) {
       return Result.failure(UnknownFailure(message: e.toString()));
     }

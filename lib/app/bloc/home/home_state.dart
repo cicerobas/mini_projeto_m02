@@ -21,6 +21,20 @@ class HomeState {
     this.errorMessage,
   });
 
+  List<TodoModel> get filteredTodoList {
+    return todos.where((todo) {
+      final matchesFilter = switch (filter) {
+        TodoFilter.all => true,
+        TodoFilter.completed => todo.completed,
+        TodoFilter.incomplete => !todo.completed,
+      };
+
+      final matchesQuery = searchQuery.isEmpty || todo.todo.toLowerCase().contains(searchQuery.toLowerCase());
+
+      return matchesFilter && matchesQuery;
+    }).toList();
+  }
+
   HomeState copyWith({
     HomeStatus? status,
     String? userName,
