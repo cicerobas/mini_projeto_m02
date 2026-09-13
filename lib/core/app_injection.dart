@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mini_projeto_m02/app/bloc/home/home_bloc.dart';
 import 'package:mini_projeto_m02/app/bloc/login/login_bloc.dart';
 import 'package:mini_projeto_m02/app/data/datasources/local/auth_local_datasource.dart';
 import 'package:mini_projeto_m02/app/data/datasources/local/todo_local_datasource.dart';
@@ -35,5 +36,9 @@ Future<void> setupDepInjection() async {
     ),
   );
 
+  //Blocs
   depInjection.registerFactory<LoginBloc>(() => LoginBloc(depInjection<AuthRepository>()));
+  depInjection.registerFactory<HomeBloc>(
+    () => HomeBloc(authRepository: depInjection<AuthRepository>(), todoRepository: depInjection<TodoRepository>()),
+  );
 }
