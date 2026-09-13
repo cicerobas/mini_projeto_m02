@@ -13,7 +13,7 @@ void bootstrap() async {
     final wb = WidgetsFlutterBinding.ensureInitialized();
     FlutterNativeSplash.preserve(widgetsBinding: wb);
 
-    setupDepInjection();
+    await setupDepInjection();
 
     final user = await depInjection<AuthRepository>().getSavedUser();
     final initialRoute = switch (user) {
