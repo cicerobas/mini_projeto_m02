@@ -27,6 +27,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _login(BuildContext context) {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -41,59 +42,95 @@ class _LoginViewState extends State<LoginView> {
       body: SafeArea(
         child: Padding(
           padding: .all(16),
-
           child: BlocConsumer<LoginBloc, LoginState>(
             builder: (context, state) {
               final isLoading = state is LoginLoading;
 
-              return Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: .center,
-                  children: [
-                    TextFormField(
-                      controller: _usernameController,
-                      decoration: const InputDecoration(labelText: "Usuário", border: OutlineInputBorder()),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return "Campo obrigatório!";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: !_showPassword,
-                      decoration: InputDecoration(
-                        labelText: "Senha",
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() => _showPassword = !_showPassword);
-                          },
-                          icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
-                        ),
-                        border: OutlineInputBorder(),
+              return Column(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: .center,
+                      child: Text(
+                        "TODO's",
+                        style: TextStyle(fontSize: 46, fontWeight: .bold, color: Theme.of(context).primaryColor),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return "Campo obrigatório!";
-                        }
-                        return null;
-                      },
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () => isLoading ? null : _login(context),
-                      child: isLoading ? CircularProgressIndicator() : const Text("Login"),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: _usernameController,
+                            decoration: InputDecoration(
+                              labelStyle: TextStyle(fontSize: 20),
+                              labelText: "Usuário",
+                              border: OutlineInputBorder(borderRadius: .circular(12)),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "Campo obrigatório!";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: !_showPassword,
+                            decoration: InputDecoration(
+                              labelStyle: TextStyle(fontSize: 20),
+                              labelText: "Senha",
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() => _showPassword = !_showPassword);
+                                },
+                                icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
+                              ),
+                              border: OutlineInputBorder(borderRadius: .circular(12)),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "Campo obrigatório!";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: FilledButton(
+                              onPressed: isLoading ? null : () => _login(context),
+                              style: FilledButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: .circular(12))),
+                              child: isLoading
+                                  ? SizedBox(height: 30, width: 30, child: CircularProgressIndicator())
+                                  : const Text("LOGIN", style: TextStyle(fontSize: 18, fontWeight: .w600)),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
             },
             listener: (context, state) {
               if (state is LoginError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message, style: const TextStyle(color: Colors.white, fontSize: 18)),
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    behavior: .floating,
+                    shape: RoundedRectangleBorder(borderRadius: .circular(12)),
+                    margin: const .all(16),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
               }
               if (state is LoginSuccess) {
                 Navigator.pushReplacementNamed(context, AppRoutes.home);

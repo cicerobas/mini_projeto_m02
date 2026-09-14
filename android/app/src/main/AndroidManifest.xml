@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="mini_projeto_m02"
+        android:label="Mini Projeto - TODO's"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
