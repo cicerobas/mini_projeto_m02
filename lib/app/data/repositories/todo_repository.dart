@@ -1,6 +1,6 @@
-import 'package:mini_projeto_m02/app/data/datasources/local/todo_local_datasource.dart';
-import 'package:mini_projeto_m02/app/data/datasources/remote/todo_remote_datasource.dart';
 import 'package:mini_projeto_m02/app/data/models/todo_model.dart';
+import 'package:mini_projeto_m02/app/features/todo/data/datasources/todo_local_datasource.dart';
+import 'package:mini_projeto_m02/app/features/todo/data/datasources/todo_remote_datasource.dart';
 import 'package:mini_projeto_m02/app/shared/app_client_excepions.dart';
 import 'package:mini_projeto_m02/app/shared/app_failures.dart';
 import 'package:mini_projeto_m02/app/shared/extensions.dart';
@@ -15,7 +15,10 @@ class TodoRepositoryImpl implements TodoRepository {
   final TodoRemoteDatasource remoteDatasource;
   final TodoLocalDatasource localDatasource;
 
-  TodoRepositoryImpl({required this.remoteDatasource, required this.localDatasource});
+  TodoRepositoryImpl({
+    required this.remoteDatasource,
+    required this.localDatasource,
+  });
 
   @override
   Future<Result<List<TodoModel>>> getTodos(int userId) async {
